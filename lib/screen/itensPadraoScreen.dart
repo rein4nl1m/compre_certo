@@ -1,5 +1,6 @@
 import 'package:compre_certo/db/dbProvider.dart';
 import 'package:compre_certo/models/itemModel.dart';
+import 'package:compre_certo/screen/novoItemScreen.dart';
 import 'package:compre_certo/widgets/editarItemAlert.dart';
 import 'package:compre_certo/widgets/infoAlert.dart';
 import 'package:compre_certo/widgets/novoItemAlert.dart';
@@ -68,7 +69,8 @@ class _ItensPadraoScreenState extends State<ItensPadraoScreen> {
                         fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
                   content: const Text(
                       "Não existem itens na lista para serem excluídos!"),
                   actions: <Widget>[
@@ -217,7 +219,9 @@ class _ItensPadraoScreenState extends State<ItensPadraoScreen> {
               bottom: 0,
               right: 0,
               child: InkWell(
-                onTap: showAlertNovoItem,
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => NovoItemScreen())),
+                //showAlertNovoItem,
                 child: Container(
                   decoration: BoxDecoration(
                       color: Colors.white,
