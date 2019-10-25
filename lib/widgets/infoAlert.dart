@@ -10,12 +10,12 @@ class _InfoAlertState extends State<InfoAlert> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text(
-        "Itens Padrão",
+        "Info",
         style: TextStyle(
             color: Colors.blue, fontSize: 20, fontWeight: FontWeight.bold),
         textAlign: TextAlign.center,
       ),
-      contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       content: RichText(
         textAlign: TextAlign.center,
@@ -48,8 +48,8 @@ class _InfoAlertState extends State<InfoAlert> {
                     fontSize: 18)),
             onPressed: () {
               Navigator.pop(context);
-            }),
-      ],
+            })
+      ]
     );
   }
 }

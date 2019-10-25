@@ -62,9 +62,15 @@ class DBProvider {
     return db.delete(tableItem, where: '$columnId = ?', whereArgs: [id]);
   }
 
+  Future<int> countItems() async {
+    final Database db = await instance.database;
+    int count = Sqflite.firstIntValue(await db.rawQuery("SELECT COUNT(*) FROM $tableItem"));
+    return count;
+  }
+
   deleteAllItems() async {
     final Database db = await instance.database;
-    db.rawDelete("DELETE * FROM $tableItem");
+    db.delete(tableItem);
   }
 
   Future<List<Item>> queryAllRows() async {

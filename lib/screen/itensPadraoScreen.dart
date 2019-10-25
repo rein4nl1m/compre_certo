@@ -17,7 +17,7 @@ class _ItensPadraoScreenState extends State<ItensPadraoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    void showAlertDialog() {
+    void showAlertNovoItem() {
       showDialog(
               context: context,
               barrierDismissible: false,
@@ -27,6 +27,63 @@ class _ItensPadraoScreenState extends State<ItensPadraoScreen> {
 
     void _showInfoAlert() {
       showDialog(context: context, builder: (_) => InfoAlert());
+    }
+
+    void showAlertExcluirTodos() {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text("Deseja excluir todos os itens?"),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                actions: <Widget>[
+                  FlatButton(
+                      child: Text("Não", style: TextStyle(color: Colors.red)),
+                      onPressed: () => Navigator.pop(context)),
+                  RaisedButton(
+                    color: Colors.red,
+                    child: Text("Sim", style: TextStyle(color: Colors.white)),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      db.deleteAllItems();
+                    },
+                  )
+                ],
+              )).then((_) => setState(() {}));
+    }
+
+    verificaItens() async {
+      int count = await db.countItems();
+      if (count > 0) {
+        showAlertExcluirTodos();
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: const Text(
+                    "Lista Vazia!",
+                    style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  content: const Text(
+                      "Não existem itens na lista para serem excluídos!"),
+                  actions: <Widget>[
+                    FlatButton(
+                        child: const Text("Ok",
+                            style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18)),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        })
+                  ],
+                ));
+      }
     }
 
     Widget _customListTile(Item item) {
@@ -95,47 +152,33 @@ class _ItensPadraoScreenState extends State<ItensPadraoScreen> {
 
     return Scaffold(
       key: _scaffold,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text(
+          "Itens Padrão",
+          style: TextStyle(
+              color: Theme.of(context).primaryColor,
+              fontSize: 20,
+              fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.info, color: Colors.blue),
+            onPressed: _showInfoAlert,
+          ),
+          IconButton(
+            icon: Icon(Icons.cancel, color: Colors.blue),
+            onPressed: verificaItens,
+          )
+        ],
+      ),
       body: SafeArea(
         child: Stack(
           children: <Widget>[
             Column(
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      IconButton(
-                        icon: const Icon(
-                          Icons.arrow_back,
-                          color: Colors.blue,
-                        ),
-                        onPressed: () {
-                          print("Back");
-                        },
-                      ),
-                      Text(
-                        "Itens Padrão",
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Row(
-                        children: <Widget>[
-                          GestureDetector(
-                            child: Icon(Icons.info, color: Colors.blue),
-                            onTap: _showInfoAlert,
-                          ),
-                          GestureDetector(
-                            child: Icon(Icons.cancel, color: Colors.blue),
-                            onTap: () {},
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
                 Expanded(
                   child: Container(
                       padding: EdgeInsets.only(top: 20, left: 20),
@@ -161,6 +204,7 @@ class _ItensPadraoScreenState extends State<ItensPadraoScreen> {
                             return Center(
                                 child: Text("Insira um novo item!",
                                     style: TextStyle(
+                                        color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20)));
                           }
@@ -173,7 +217,7 @@ class _ItensPadraoScreenState extends State<ItensPadraoScreen> {
               bottom: 0,
               right: 0,
               child: InkWell(
-                onTap: showAlertDialog,
+                onTap: showAlertNovoItem,
                 child: Container(
                   decoration: BoxDecoration(
                       color: Colors.white,

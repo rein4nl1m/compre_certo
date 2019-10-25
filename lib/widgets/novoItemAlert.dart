@@ -36,6 +36,7 @@ class _NovoItemAlertState extends State<NovoItemAlert> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       content: Container(
         height: 180,
+        width: 200,
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: SingleChildScrollView(
           child: Form(
