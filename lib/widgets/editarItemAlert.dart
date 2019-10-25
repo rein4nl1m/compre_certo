@@ -2,18 +2,29 @@ import 'package:compre_certo/db/dbProvider.dart';
 import 'package:compre_certo/models/itemModel.dart';
 import 'package:flutter/material.dart';
 
-class NovoItemAlert extends StatefulWidget {
+class EditarItemAlert extends StatefulWidget {
+  final Item item;
+
+  const EditarItemAlert({Key key, this.item}) : super(key: key);
+
   @override
-  _NovoItemAlertState createState() => _NovoItemAlertState();
+  _EditarItemAlertState createState() => _EditarItemAlertState();
 }
 
-class _NovoItemAlertState extends State<NovoItemAlert> {
+class _EditarItemAlertState extends State<EditarItemAlert> {
   GlobalKey<FormState> _form = GlobalKey<FormState>();
   TextEditingController _itemController = TextEditingController();
   TextEditingController _qtdController = TextEditingController();
   FocusNode _nodeItem = FocusNode();
   FocusNode _nodeQtd = FocusNode();
   DBProvider db = DBProvider.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    _itemController.text = widget.item.nome;
+    _qtdController.text = widget.item.quantidade.toString();
+  }
 
   @override
   void dispose() {
@@ -28,7 +39,7 @@ class _NovoItemAlertState extends State<NovoItemAlert> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text(
-        "Insira o Novo Item: ",
+        "Editar Item: ",
         style: TextStyle(
             color: Colors.blue, fontSize: 20, fontWeight: FontWeight.bold),
         textAlign: TextAlign.start,
@@ -82,13 +93,14 @@ class _NovoItemAlertState extends State<NovoItemAlert> {
             }),
         RaisedButton(
           color: Colors.blue,
-          child: const Text("Incluir", style: TextStyle(color: Colors.white)),
-          onPressed: () {
+          child: const Text("Confirmar", style: TextStyle(color: Colors.white)),
+          onPressed: () async {
             if (_form.currentState.validate()) {
               var item = Item();
+              item.id = widget.item.id;
               item.nome = _itemController.text;
               item.quantidade = int.parse(_qtdController.text);
-              db.insertItem(item);
+              db.updateItem(item);
               setState(() {});
               Navigator.pop(context);
             }
