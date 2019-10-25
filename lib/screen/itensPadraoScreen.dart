@@ -121,12 +121,17 @@ class _ItensPadraoScreenState extends State<ItensPadraoScreen> {
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
                       ),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.info,
-                          color: Colors.blue,
-                        ),
-                        onPressed: _showInfoAlert,
+                      Row(
+                        children: <Widget>[
+                          GestureDetector(
+                            child: Icon(Icons.info, color: Colors.blue),
+                            onTap: _showInfoAlert,
+                          ),
+                          GestureDetector(
+                            child: Icon(Icons.cancel, color: Colors.blue),
+                            onTap: () {},
+                          )
+                        ],
                       )
                     ],
                   ),
@@ -164,14 +169,26 @@ class _ItensPadraoScreenState extends State<ItensPadraoScreen> {
                 ),
               ],
             ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: InkWell(
+                onTap: showAlertDialog,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius:
+                          BorderRadius.only(topLeft: Radius.circular(60))),
+                  width: 70,
+                  height: 70,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(top: 10, left: 10),
+                  child: Icon(Icons.add, color: Colors.blue, size: 40),
+                ),
+              ),
+            )
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.white,
-        icon: const Icon(Icons.add, color: Colors.blue),
-        label: const Text("Novo Item", style: TextStyle(color: Colors.blue)),
-        onPressed: showAlertDialog,
       ),
     );
   }

@@ -86,7 +86,7 @@ class _NovoItemAlertState extends State<NovoItemAlert> {
           onPressed: () {
             if (_form.currentState.validate()) {
               var item = Item();
-              item.nome = _itemController.text;
+              item.nome = _itemController.text.substring(0, 1).toUpperCase() + _itemController.text.substring(1);
               item.quantidade = int.parse(_qtdController.text);
               db.insertItem(item);
               setState(() {});
