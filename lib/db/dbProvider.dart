@@ -14,6 +14,7 @@ class DBProvider {
   static final columnId = "_id";
   static final columnNome = "nome";
   static final columnQuantidade = "quantidade";
+  static final columnMedida = "medida";
 
   DBProvider._privateConstructor();
   static final DBProvider instance = DBProvider._privateConstructor();
@@ -40,6 +41,7 @@ class DBProvider {
           $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
           $columnNome TEXT NOT NULL,
           $columnQuantidade INTEGER NOT NULL,
+          $columnMedida INTEGER NOT NULL,
           UNIQUE($columnNome)
         )
     ''');
@@ -49,7 +51,6 @@ class DBProvider {
     final Database db = await instance.database;
     return db.insert(tableItem, item.toJson());
   }
-  
 
   updateItem(Item item) async {
     final Database db = await instance.database;
@@ -64,7 +65,8 @@ class DBProvider {
 
   Future<int> countItems() async {
     final Database db = await instance.database;
-    int count = Sqflite.firstIntValue(await db.rawQuery("SELECT COUNT(*) FROM $tableItem"));
+    int count = Sqflite.firstIntValue(
+        await db.rawQuery("SELECT COUNT(*) FROM $tableItem"));
     return count;
   }
 

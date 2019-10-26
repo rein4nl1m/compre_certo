@@ -1,11 +1,11 @@
 import 'package:compre_certo/db/dbProvider.dart';
 import 'package:compre_certo/models/itemModel.dart';
-import 'package:compre_certo/screen/novoItemScreen.dart';
-import 'package:compre_certo/widgets/editarItemAlert.dart';
+import 'package:compre_certo/screens/editarItemScreen.dart';
+import 'package:compre_certo/screens/novoItemScreen.dart';
 import 'package:compre_certo/widgets/infoAlert.dart';
-import 'package:compre_certo/widgets/novoItemAlert.dart';
 import 'package:compre_certo/widgets/slideBackground.dart';
 import 'package:flutter/material.dart';
+import 'package:compre_certo/data/dados.dart';
 
 class ItensPadraoScreen extends StatefulWidget {
   @override
@@ -18,14 +18,6 @@ class _ItensPadraoScreenState extends State<ItensPadraoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    void showAlertNovoItem() {
-      showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) => NovoItemAlert())
-          .then((_) => setState(() {}));
-    }
-
     void _showInfoAlert() {
       showDialog(context: context, builder: (_) => InfoAlert());
     }
@@ -94,13 +86,24 @@ class _ItensPadraoScreenState extends State<ItensPadraoScreen> {
           background: SlideDeleteBackground(),
           secondaryBackground: SlideEditBackground(),
           child: ListTile(
-            onTap: () => showDialog(
-                context: context,
-                builder: (context) => EditarItemAlert(item: item)),
-            title:
-                Text(item.nome, style: TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: Text("Quantidade.: ${item.quantidade}"),
-          ),
+              contentPadding: EdgeInsets.only(top: 10),
+              title: Text(item.nome,
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              subtitle: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text("Quantidade: ${item.quantidade}"),
+                      Text("Medida: ${unidList[item.medida]}"),
+                      SizedBox(width: 10)
+                    ],
+                  ),
+                  Divider(
+                    color: Colors.black,
+                  )
+                ],
+              )),
           confirmDismiss: (direction) {
             if (direction == DismissDirection.startToEnd) {
               showDialog(
@@ -134,7 +137,7 @@ class _ItensPadraoScreenState extends State<ItensPadraoScreen> {
                                         });
                                       },
                                     ),
-                                    duration: Duration(seconds: 3));
+                                    duration: Duration(milliseconds: 1500));
 
                                 _scaffold.currentState.removeCurrentSnackBar();
                                 _scaffold.currentState.showSnackBar(snack);
@@ -144,51 +147,49 @@ class _ItensPadraoScreenState extends State<ItensPadraoScreen> {
                         ],
                       ));
             } else {
-              showDialog(
-                      context: context,
-                      builder: (context) => EditarItemAlert(item: item))
+              Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EditarItemScreen(item: item)))
                   .then((_) => setState(() {}));
             }
           });
     }
 
     return Scaffold(
-      key: _scaffold,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          "Itens Padrão",
-          style: TextStyle(
-              color: Theme.of(context).primaryColor,
-              fontSize: 20,
-              fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.info, color: Colors.blue),
-            onPressed: _showInfoAlert,
+        key: _scaffold,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: const Text(
+            "Itens Padrão",
+            style: TextStyle(
+                color: Colors.blue, fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          IconButton(
-            icon: Icon(Icons.cancel, color: Colors.blue),
-            onPressed: verificaItens,
-          )
-        ],
-      ),
-      body: SafeArea(
-        child: Stack(
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                      padding: EdgeInsets.only(top: 20, left: 20),
-                      decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius:
-                              BorderRadius.only(topLeft: Radius.circular(60))),
-                      child: FutureBuilder<List<Item>>(
+          iconTheme: const IconThemeData(color: Colors.blue),
+          centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.info),
+              onPressed: _showInfoAlert,
+            ),
+            IconButton(
+              icon: const Icon(Icons.cancel),
+              onPressed: verificaItens,
+            )
+          ],
+        ),
+        body: SafeArea(
+            child: Stack(children: <Widget>[
+          Column(children: <Widget>[
+            Expanded(
+                child: Container(
+                    padding: EdgeInsets.only(top: 20, left: 20),
+                    decoration: const BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius:
+                            BorderRadius.only(topLeft: Radius.circular(60))),
+                    child: FutureBuilder<List<Item>>(
                         future: db.queryAllRows(),
                         builder: (BuildContext context,
                             AsyncSnapshot<List<Item>> snapshot) {
@@ -210,34 +211,30 @@ class _ItensPadraoScreenState extends State<ItensPadraoScreen> {
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20)));
                           }
-                        },
-                      )),
-                ),
-              ],
-            ),
-            Positioned(
+                        })))
+          ]),
+          Positioned(
               bottom: 0,
               right: 0,
               child: InkWell(
-                onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => NovoItemScreen())),
-                //showAlertNovoItem,
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius:
-                          BorderRadius.only(topLeft: Radius.circular(60))),
-                  width: 70,
-                  height: 70,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(top: 10, left: 10),
-                  child: Icon(Icons.add, color: Colors.blue, size: 40),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NovoItemScreen())),
+                  child: Hero(
+                      tag: "novoItem",
+                      child: Container(
+                        decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(60))),
+                        width: 70,
+                        height: 70,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.only(top: 10, left: 10),
+                        child:
+                            const Icon(Icons.add, color: Colors.blue, size: 40),
+                      ))))
+        ])));
   }
 }

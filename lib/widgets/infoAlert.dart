@@ -21,7 +21,7 @@ class _InfoAlertState extends State<InfoAlert> {
         textAlign: TextAlign.center,
         text: TextSpan(
             style: TextStyle(color: Colors.black, fontSize: 16),
-            text: "Estes são os ",
+            text: "Aqui estarão ",
             children: <TextSpan>[
               TextSpan(
                   text: "\"Itens Padrão\"",
@@ -31,12 +31,15 @@ class _InfoAlertState extends State<InfoAlert> {
                   text: "Lista de Compras",
                   style: TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(text: "!"),
-              TextSpan(text: "\nPara adicionar novos"),
+              TextSpan(text: "\n\nPara adicionar novos"),
               TextSpan(
                 text: " Itens ",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              TextSpan(text: "pressione o botão no final da tela!"),
+              TextSpan(text: "pressione o botão no final da tela!\n\n"),
+              TextSpan(text: "Caso queira reiniciar a lista, bastar pressionar o botão "),
+              TextSpan(text: "Cancelar", style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(text: " no canto superior esquerdo da tela!")
             ]),
       ),
       actions: <Widget>[

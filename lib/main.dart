@@ -1,4 +1,4 @@
-import 'package:compre_certo/screen/itensPadraoScreen.dart';
+import 'package:compre_certo/screens/homeScreen.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: ItensPadraoScreen()
+      home: HomeScreen()
     );
   }
 }
