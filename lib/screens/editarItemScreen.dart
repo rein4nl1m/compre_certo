@@ -1,10 +1,10 @@
 import 'package:compre_certo/db/dbProvider.dart';
-import 'package:compre_certo/models/itemModel.dart';
+import 'package:compre_certo/models/itemPadraoModel.dart';
 import 'package:flutter/material.dart';
 import 'package:compre_certo/data/dados.dart';
 
 class EditarItemScreen extends StatefulWidget {
-  final Item item;
+  final ItemPadrao item;
 
   const EditarItemScreen({Key key, this.item}) : super(key: key);
 
@@ -207,7 +207,7 @@ class _EditarItemScreenState extends State<EditarItemScreen> {
                             style: TextStyle(color: Colors.blue)),
                         onPressed: () {
                           if (_form.currentState.validate()) {
-                            var item = Item();
+                            var item = ItemPadrao();
                             item.id = widget.item.id;
                             item.nome = _itemController.text
                                     .substring(0, 1)

@@ -1,5 +1,5 @@
 import 'package:compre_certo/db/dbProvider.dart';
-import 'package:compre_certo/models/itemModel.dart';
+import 'package:compre_certo/models/itemPadraoModel.dart';
 import 'package:compre_certo/screens/editarItemScreen.dart';
 import 'package:compre_certo/screens/novoItemScreen.dart';
 import 'package:compre_certo/widgets/infoAlert.dart';
@@ -38,7 +38,7 @@ class _ItensPadraoScreenState extends State<ItensPadraoScreen> {
                     child: Text("Sim", style: TextStyle(color: Colors.white)),
                     onPressed: () {
                       Navigator.pop(context);
-                      db.deleteAllItems();
+                      db.deleteAllItens();
                     },
                   )
                 ],
@@ -46,7 +46,7 @@ class _ItensPadraoScreenState extends State<ItensPadraoScreen> {
     }
 
     verificaItens() async {
-      int count = await db.countItems();
+      int count = await db.countItens();
       if (count > 0) {
         showAlertExcluirTodos();
       } else {
@@ -80,30 +80,33 @@ class _ItensPadraoScreenState extends State<ItensPadraoScreen> {
       }
     }
 
-    Widget _customListTile(Item item) {
+    Widget _customListTile(ItemPadrao item) {
       return Dismissible(
           key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
           background: SlideDeleteBackground(),
           secondaryBackground: SlideEditBackground(),
-          child: ListTile(
-              contentPadding: EdgeInsets.only(top: 10),
-              title: Text(item.nome,
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              subtitle: Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text("Quantidade: ${item.quantidade}"),
-                      Text("Medida: ${unidList[item.medida]}"),
-                      SizedBox(width: 10)
-                    ],
-                  ),
-                  Divider(
-                    color: Colors.black,
-                  )
-                ],
-              )),
+          child: Container(
+            decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(color: Colors.black))),
+            width: MediaQuery.of(context).size.width * .92,
+            padding: EdgeInsets.only(left: 10),
+            child: ListTile(
+                contentPadding: EdgeInsets.only(top: 10),
+                title: Text(item.nome,
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                subtitle: Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text("Quantidade: ${item.quantidade}"),
+                        Text("Medida: ${unidList[item.medida]}"),
+                        SizedBox(width: 20)
+                      ],
+                    )
+                  ],
+                )),
+          ),
           confirmDismiss: (direction) {
             if (direction == DismissDirection.startToEnd) {
               showDialog(
@@ -189,17 +192,17 @@ class _ItensPadraoScreenState extends State<ItensPadraoScreen> {
                         color: Colors.blue,
                         borderRadius:
                             BorderRadius.only(topLeft: Radius.circular(60))),
-                    child: FutureBuilder<List<Item>>(
-                        future: db.queryAllRows(),
+                    child: FutureBuilder<List<ItemPadrao>>(
+                        future: db.queryAllRowsItens(),
                         builder: (BuildContext context,
-                            AsyncSnapshot<List<Item>> snapshot) {
+                            AsyncSnapshot<List<ItemPadrao>> snapshot) {
                           if (snapshot.hasData) {
                             return ListView.builder(
                               scrollDirection: Axis.vertical,
                               padding: EdgeInsets.only(bottom: 5),
                               itemCount: snapshot.data.length,
                               itemBuilder: (BuildContext context, int index) {
-                                Item item = snapshot.data[index];
+                                ItemPadrao item = snapshot.data[index];
                                 return _customListTile(item);
                               },
                             );

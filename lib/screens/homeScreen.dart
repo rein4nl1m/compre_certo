@@ -1,5 +1,7 @@
+import 'package:compre_certo/screens/historicoScreen.dart';
 import 'package:compre_certo/screens/itensPadraoScreen.dart';
 import 'package:compre_certo/screens/listaComprasScreen.dart';
+import 'package:compre_certo/screens/sobreScreen.dart';
 import 'package:compre_certo/widgets/customSection.dart';
 import 'package:flutter/material.dart';
 
@@ -55,14 +57,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           CustomSection(
-                            iconData: Icons.history,
-                            title: "Histórico de Compras",
-                          ),
+                              iconData: Icons.history,
+                              title: "Histórico de Compras",
+                              route: MaterialPageRoute(
+                                  builder: (context) => HistoricoScreen())),
                           SizedBox(width: 5),
                           CustomSection(
-                            iconData: Icons.info,
-                            title: "Sobre o App",
-                          )
+                              iconData: Icons.info,
+                              title: "Sobre o App",
+                              route: MaterialPageRoute(
+                                  builder: (context) => SobreScreen())),
                         ]),
                     SizedBox(height: 20)
                   ]),

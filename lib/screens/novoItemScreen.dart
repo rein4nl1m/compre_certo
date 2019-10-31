@@ -1,5 +1,5 @@
 import 'package:compre_certo/db/dbProvider.dart';
-import 'package:compre_certo/models/itemModel.dart';
+import 'package:compre_certo/models/itemPadraoModel.dart';
 import 'package:flutter/material.dart';
 import 'package:compre_certo/data/dados.dart';
 
@@ -198,7 +198,7 @@ class _NovoItemScreenState extends State<NovoItemScreen> {
                             style: TextStyle(color: Colors.blue)),
                         onPressed: () {
                           if (_form.currentState.validate()) {
-                            var item = Item();
+                            var item = ItemPadrao();
                             item.nome = _itemController.text
                                     .substring(0, 1)
                                     .toUpperCase() +

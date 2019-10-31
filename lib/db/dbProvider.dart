@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:async';
-import 'package:compre_certo/models/itemModel.dart';
+import 'package:compre_certo/models/itemListaModel.dart';
+import 'package:compre_certo/models/itemPadraoModel.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -10,11 +11,18 @@ class DBProvider {
   static final _databaseVersion = 1;
 
   static final tableItem = "item_padrao";
+  static final listaCompras = "lista_compras";
+  static final historicoCompras = "historico_compras";
 
   static final columnId = "_id";
   static final columnNome = "nome";
   static final columnQuantidade = "quantidade";
   static final columnMedida = "medida";
+  static final columnVlrUnit = "vlr_unit";
+  static final columnItemPadrao = "item_padrao";
+  static final columnDtCompra = "dt_compra";
+  static final columnItensCompra = "itens_compra";
+  static final columnTotalCompra = "total_compra";
 
   DBProvider._privateConstructor();
   static final DBProvider instance = DBProvider._privateConstructor();
@@ -43,16 +51,31 @@ class DBProvider {
           $columnQuantidade INTEGER NOT NULL,
           $columnMedida INTEGER NOT NULL,
           UNIQUE($columnNome)
-        )
+        );
+
+        CREATE TABLE $listaCompras (
+          $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
+          $columnQuantidade INTEGER NOT NULL,
+          $columnMedida INTEGER NOT NULL,
+          $columnVlrUnit DOUBLE NOT NULL,
+          $columnItemPadrao TEXT NOT NULL
+        );
+
+        CREATE TABLE $historicoCompras (
+          $columnDtCompra TEXT PRIMARY KEY,
+          $columnItensCompra TEXT NOT NULL,
+          $columnTotalCompra DOUBLE NOT NULL,
+          UNIQUE($columnDtCompra)
+        );
     ''');
   }
 
-  Future<int> insertItem(Item item) async {
+  Future<int> insertItem(ItemPadrao item) async {
     final Database db = await instance.database;
     return db.insert(tableItem, item.toJson());
   }
 
-  updateItem(Item item) async {
+  updateItem(ItemPadrao item) async {
     final Database db = await instance.database;
     return db.update(tableItem, item.toJson(),
         where: '$columnId = ?', whereArgs: [item.id]);
@@ -63,23 +86,31 @@ class DBProvider {
     return db.delete(tableItem, where: '$columnId = ?', whereArgs: [id]);
   }
 
-  Future<int> countItems() async {
+  Future<int> countItens() async {
     final Database db = await instance.database;
     int count = Sqflite.firstIntValue(
         await db.rawQuery("SELECT COUNT(*) FROM $tableItem"));
     return count;
   }
 
-  deleteAllItems() async {
+  deleteAllItens() async {
     final Database db = await instance.database;
     db.delete(tableItem);
   }
 
-  Future<List<Item>> queryAllRows() async {
+  Future<List<ItemPadrao>> queryAllRowsItens() async {
     final Database db = await instance.database;
     var res = await db.query(tableItem, orderBy: "$columnNome");
-    List<Item> list =
-        res.isNotEmpty ? res.map((i) => Item.fromJson(i)).toList() : null;
+    List<ItemPadrao> list =
+        res.isNotEmpty ? res.map((i) => ItemPadrao.fromJson(i)).toList() : null;
+    return list;
+  }
+
+  Future<List<ItemLista>> queryAllRowsCompras() async {
+    final Database db = await instance.database;
+    var res = await db.query(tableItem, orderBy: "$columnNome");
+    List<ItemLista> list =
+        res.isNotEmpty ? res.map((i) => ItemLista.fromJson(i)).toList() : null;
     return list;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:compre_certo/db/dbProvider.dart';
 import 'package:flutter/material.dart';
 
 class ListaComprasScreen extends StatefulWidget {
@@ -6,6 +7,8 @@ class ListaComprasScreen extends StatefulWidget {
 }
 
 class _ListaComprasScreenState extends State<ListaComprasScreen> {
+  DBProvider db = DBProvider.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,29 +22,12 @@ class _ListaComprasScreenState extends State<ListaComprasScreen> {
           ),
           iconTheme: const IconThemeData(color: Colors.blue),
           centerTitle: true,
-          /* actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.info),
-            onPressed: (){},
-          ),
-          IconButton(
-            icon: const Icon(Icons.cancel),
-            onPressed: (){},
-          )
-        ], */
         ),
         body: SafeArea(
-            child: Stack(children: <Widget>[
-          Column(children: <Widget>[
-            Expanded(
-                child: Container(
-                    padding: EdgeInsets.only(top: 20, left: 20),
-                    decoration: const BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius:
-                            BorderRadius.only(topLeft: Radius.circular(60))),
-                    child: Container()))
-          ])
-        ])));
+            child: Container(
+          decoration: const BoxDecoration(
+              color: Colors.blue,
+              borderRadius: BorderRadius.only(topRight: Radius.circular(60))),
+        )));
   }
 }
